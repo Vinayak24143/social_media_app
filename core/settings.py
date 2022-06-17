@@ -37,10 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_celery_beat',
+    'django_celery_results',
+
     'account',
     'rest_framework',
     'rest_framework_simplejwt',
     'status',
+    
 ]
 
 MIDDLEWARE = [
@@ -141,3 +146,19 @@ SIMPLE_JWT = {
 'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
 'REFRESH_TOKEN_LIFETIME': timedelta(days=20),
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
